@@ -19,17 +19,36 @@
  */
 
 // ** MySQL settings - You can get this info from your web host ** //
+
+//Get MySQL DB parameters from env variables
+$connectstr_dbhost = '';
+$connectstr_dbname = '';
+$connectstr_dbusername = '';
+$connectstr_dbpassword = '';
+foreach ($_SERVER as $key => $value) {
+    if (strpos($key, "MYSQLCONNSTR_") !== 0) {
+        continue;
+    }
+    
+    $connectstr_dbhost = preg_replace("/^.*Data Source=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbname = preg_replace("/^.*Database=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbusername = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
+    $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
+}
+
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'bitnami_wordpress' );
+//define( 'DB_NAME', 'bitnami_wordpress' );
+define( 'DB_NAME', $connectstr_dbname );
 
 /** MySQL database username */
-define( 'DB_USER', 'bn_wordpress' );
+// define( 'DB_USER', 'bn_wordpress' );
 
+define( 'DB_USER', $connectstr_dbusername );
 /** MySQL database password */
-define( 'DB_PASSWORD', '265ef33030' );
+define( 'DB_PASSWORD', $connectstr_dbpassword );
 
 /** MySQL hostname */
-define( 'DB_HOST', '127.0.0.1:3307' );
+define( 'DB_HOST', $connectstr_dbhost );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
